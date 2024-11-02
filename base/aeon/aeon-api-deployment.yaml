@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aeon-api
+  labels:
+    app.kubernetes.io/name: aeon-api
+    app.kubernetes.io/developer: dolorestec
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aeon-api
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aeon-api
+        app.kubernetes.io/developer: dolorestec
+    spec:
+      imagePullSecrets:
+        - name: docker-registry-secret
+      restartPolicy: Always
+      containers:
+        - name: aeon-api
+          image: aeon-api-image
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "0.01"
+              memory: "2560M"
+            limits:
+              cpu: "2"
+              memory: "5120M"
+          envFrom:
+          - configMapRef:
+              name: aeon-config
+          - secretRef:
+              name: aeon-secret
+          volumeMounts:
+            - mountPath: /
+              name: aeon
+      volumes:
+        - name: aeon

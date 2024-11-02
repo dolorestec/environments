@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dolorestec-ingress
+  labels:
+    name: dolorestec-ingress
+spec:
+  rules:
+  - host: dolorestec.local
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: aeon-api
+            port: 
+              number: 9000

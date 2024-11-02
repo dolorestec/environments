@@ -1,0 +1,30 @@
+- op: replace
+  path: /metadata/name
+  value: development-ingress
+  
+- op: replace
+  path: /spec/rules/0/host
+  value: development.dolorestec.local
+
+- op: add
+  path: /spec/tls
+  value:
+    - hosts:
+        - development.dolorestec.local
+      secretName: dolorestec-tls
+
+- op: replace
+  path: /spec/ingressClassName
+  value: traefik
+
+# Aeon
+- op: add
+  path: /spec/rules/0/http/paths/-
+  value:
+    path: /docs
+    pathType: Prefix
+    backend:
+      service:
+        name: aeon-api
+        port:
+          number: 9000
